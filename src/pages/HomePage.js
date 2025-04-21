@@ -5,10 +5,15 @@ const HomePage = () => {
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_BASE_URL}/api/services`)
-      .then(res => res.json())
+      .then(async res => {
+        const text = await res.text();
+        console.log("Raw response:", text);
+        return JSON.parse(text);
+      })
       .then(data => setServices(data))
       .catch(err => console.error("❌ Failed to load services:", err));
   }, []);
+  
 
   return (
     <div className="bg-white min-h-screen font-jetbrains text-gray-800">
