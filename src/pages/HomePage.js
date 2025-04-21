@@ -6,9 +6,16 @@ const HomePage = () => {
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_BASE_URL}/api/services`)
-      .then((res) => {
+      .then(async (res) => {
         if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-        return res.json();
+        const text = await res.text();
+        console.log("📦 Raw API response:", text);
+        try {
+          return JSON.parse(text);
+        } catch (err) {
+          console.error("❌ JSON parsing failed:", err.message);
+          throw new Error("Invalid JSON from API");
+        }
       })
       .then((data) => setServices(data))
       .catch((err) => {
