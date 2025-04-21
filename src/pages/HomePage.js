@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 
 const HomePage = () => {
   const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_BASE_URL}/api/services`)
-      .then(async res => {
-        const text = await res.text();
-        console.log("Raw response:", text);
-        return JSON.parse(text);
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+        return res.json();
       })
-      .then(data => setServices(data))
-      .catch(err => console.error("❌ Failed to load services:", err));
+      .then((data) => setServices(data))
+      .catch((err) => {
+        console.error("❌ Failed to load services:", err);
+      })
+      .finally(() => setLoading(false));
   }, []);
-  
 
   return (
     <div className="bg-white min-h-screen font-jetbrains text-gray-800">
@@ -38,7 +40,9 @@ const HomePage = () => {
       {/* Services Section */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-5xl mx-auto grid gap-10 md:grid-cols-3">
-          {services.length > 0 ? (
+          {loading ? (
+            <p className="text-center col-span-3 text-gray-500">Loading services...</p>
+          ) : services.length > 0 ? (
             services.map((service, idx) => (
               <div
                 key={idx}
@@ -49,7 +53,7 @@ const HomePage = () => {
               </div>
             ))
           ) : (
-            <p className="text-center col-span-3 text-gray-500">Loading services...</p>
+            <p className="text-center col-span-3 text-red-500">No services available.</p>
           )}
         </div>
       </section>
