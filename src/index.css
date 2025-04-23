@@ -2,13 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* === Global Styles === */
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  @apply bg-black text-white font-jetbrains antialiased;
+  @apply bg-[#f5fef7] text-black font-jetbrains antialiased;
   margin: 0;
+  padding: 0;
 }
 
 code {
   font-family: 'JetBrains Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-  @apply text-blue-400;
+  @apply text-blue-600;
 }
